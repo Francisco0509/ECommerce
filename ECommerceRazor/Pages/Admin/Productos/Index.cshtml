@@ -1,0 +1,125 @@
+﻿@page
+@model ECommerceRazor.Pages.Admin.Productos.IndexModel
+@{
+    ViewData["Title"] = "Lista de Productos";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Lista de productos</h2>
+        <a asp-page="Crear" class="btn btn-primary"><i class="fa-regular fa-square-plus"></i> Nuevo producto</a>
+    </div>
+    @if (Model.lProductos != null && Model.lProductos.Any())
+    {
+        <table id="tbProductos" class="table table-stripped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Imagen</th>
+                    <th>Precio</th>
+                    <th>Stock</th>
+                    <th>Categoría</th>
+                    <th>Fecha de creación</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var producto in Model.lProductos)
+                {
+                    <tr>
+                        <td>@producto.Id</td>
+                        <td>@producto.Nombre</td>
+                        <td>@producto.Descripcion</td>
+                        <td>@producto.Imagen</td>
+                        <td>@producto.Precio</td>
+                        <td>@producto.Stock</td>
+                        <td>@producto.CategoriaId</td>
+                        <td>@producto.FechaCreacion.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <a asp-page="Editar" asp-route-id="@producto.Id" class="btn btn-sm btn-warning"><i class="fa-solid fa-pen-to-square"></i> Editar</a>
+                            <a asp-page="Detalle" asp-route-id="@producto.Id" class="btn btn-sm btn-info"><i class="fa-solid fa-circle-info"></i> Detalle</a>
+                            @Html.AntiForgeryToken()
+                            <buton class="btn btn-danger btn-delete btn-sm" data-id="@producto.Id" data-name="@producto.Nombre"><i class="fa-solid fa-trash-can"></i>Eliminar</buton>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            No hay productos registrados aún.
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function(){
+            $('#tbProductos').DataTable({
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.13.5/i18n/es-ES.json" // Tradicción al español
+                },
+                pageLength: 10, // Cantidad de registros por página
+                ordering: true, //Habilitar ordenamiento
+                searching: true //Habilitar la busqueda
+            });
+        });
+    </script>
+
+    <script>
+        document.querySelectorAll('.btn-delete').forEach(button => {
+            button.addEventListener('click', function () {
+                const productoId = this.getAttribute('data-id');
+                const productoName = this.getAttribute('data-name');
+
+                Swal.fire({
+                    title: `¿Estás seguro de eliminar la categoría "${categoriaName}"?`,
+                    text: "Esta acción no se puede deshacer.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Sí, eliminar",
+                    cancelButtonText: "Cancelar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        console.log(JSON.stringify(categoriaId));
+                        fetch("?handler=Delete", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "RequestVerificationToken": document.querySelector('input[name="__RequestVerificationToken"]').value
+                            },
+                            body: JSON.stringify(productoId) // Asegúrate de enviar el id como un número
+
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire(
+                                    "Eliminado",
+                                    `El producto "${productoName}" ha sido eliminado.`,
+                                    "success"
+                                ).then(() => {
+                                    window.location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    "Error",
+                                    data.message || "Ocurrió un problema al eliminar el producto.",
+                                    "error"
+                                );
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+

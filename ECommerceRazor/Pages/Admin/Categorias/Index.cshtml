@@ -1,0 +1,125 @@
+﻿@page
+@model ECommerceRazor.Pages.Admin.Categorias.IndexModel
+@{
+    ViewData["Title"] = "Categorias";
+}
+
+<div class="container mt-4">
+    <!--Mensaje desde el code behind con alertas de bootstrap-->
+    @* @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" arial-label="Close"></button>
+        </div>    
+    } *@
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Lista de categorías</h2>
+        <a asp-page="Crear" class="btn btn-primary"><i class="fa-regular fa-square-plus"></i> Nueva categoría</a>
+    </div>
+    @if (Model.lCategorias != null && Model.lCategorias.Any())
+    {
+        <table id="tbCategorias" class="table table-stripped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Orden de visualización</th>
+                    <th>Fecha de creación</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var categoria in Model.lCategorias)
+                { 
+                    <tr>
+                        <td>@categoria.Id</td>
+                        <td>@categoria.Nombre</td>
+                        <td>@categoria.OrdenVisualizacion</td>
+                        <td>@categoria.FechaCreacion.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            <a asp-page="Editar" asp-route-id="@categoria.Id" class="btn btn-sm btn-warning"><i class="fa-solid fa-pen-to-square"></i> Editar</a>
+                            <a asp-page="Detalle" asp-route-id="@categoria.Id" class="btn btn-sm btn-info"><i class="fa-solid fa-circle-info"></i> Detalle</a>
+                            @Html.AntiForgeryToken()
+                            <buton class="btn btn-danger btn-delete" data-id="@categoria.Id" data-name="@categoria.Nombre"><i class="fa-solid fa-trash-can"></i>Eliminar</buton>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            No hay categorías registradas aún.
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function(){
+            $('#tbCategorias').DataTable({
+                language: {
+                    url: "//cdn.datatables.net/plug-ins/1.13.5/i18n/es-ES.json" // Tradicción al español
+                },
+                pageLength: 10, // Cantidad de registros por página
+                ordering: true, //Habilitar ordenamiento
+                searching: true //Habilitar la busqueda
+            });
+        });
+    </script>
+
+    <script>
+        document.querySelectorAll('.btn-delete').forEach(button => {
+            button.addEventListener('click', function () {
+                const categoriaId = this.getAttribute('data-id');
+                const categoriaName = this.getAttribute('data-name');
+
+                Swal.fire({
+                    title: `¿Estás seguro de eliminar la categoría "${categoriaName}"?`,
+                    text: "Esta acción no se puede deshacer.",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#d33",
+                    cancelButtonColor: "#3085d6",
+                    confirmButtonText: "Sí, eliminar",
+                    cancelButtonText: "Cancelar"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        console.log(JSON.stringify(categoriaId));
+                        fetch("?handler=Delete", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "RequestVerificationToken": document.querySelector('input[name="__RequestVerificationToken"]').value
+                            },
+                            body: JSON.stringify(categoriaId) // Asegúrate de enviar el id como un número
+
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                Swal.fire(
+                                    "Eliminado",
+                                    `La categoría "${categoriaName}" ha sido eliminada.`,
+                                    "success"
+                                ).then(() => {
+                                    window.location.reload();
+                                });
+                            } else {
+                                Swal.fire(
+                                    "Error",
+                                    data.message || "Ocurrió un problema al eliminar la categoría.",
+                                    "error"
+                                );
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}
+
+

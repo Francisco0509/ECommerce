@@ -24,9 +24,17 @@ namespace ECommerceRazor.DataAccess.Repository
             _dbSet.Add(entity);
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll(string? includeProperties = null)
         {
             IQueryable<T> queryable = _dbSet;
+            //Incluir relaciones
+            if(!string.IsNullOrWhiteSpace(includeProperties))
+            {
+                foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    queryable = queryable.Include(includeProperty.Trim());
+                }
+            }
             return queryable.ToList();
         }
 

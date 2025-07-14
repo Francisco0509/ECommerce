@@ -16,7 +16,7 @@ namespace ECommerceRazor.Pages.Admin.Productos
         public IEnumerable<Producto> lProductos { get; set; }
         public void OnGet()
         {
-            lProductos = _unitOfWork.Producto.GetAll();
+            lProductos = _unitOfWork.Producto.GetAll("Categoria"); //Incluir la categoría en la consulta
         }
     }
 }

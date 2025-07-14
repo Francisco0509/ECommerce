@@ -32,10 +32,12 @@
                         <td>@producto.Id</td>
                         <td>@producto.Nombre</td>
                         <td>@producto.Descripcion</td>
-                        <td>@producto.Imagen</td>
+                        <td>
+                            <img src="@Url.Content($"~/img/{producto.Imagen}")" alt="Imagen de @producto.Nombre" style="width: 60px; height: auto;"/>
+                        </td>
                         <td>@producto.Precio</td>
                         <td>@producto.Stock</td>
-                        <td>@producto.CategoriaId</td>
+                        <td>@producto.Categoria.Nombre</td>
                         <td>@producto.FechaCreacion.ToString("dd/MM/yyyy")</td>
                         <td>
                             <a asp-page="Editar" asp-route-id="@producto.Id" class="btn btn-sm btn-warning"><i class="fa-solid fa-pen-to-square"></i> Editar</a>
@@ -65,7 +67,10 @@
                 },
                 pageLength: 10, // Cantidad de registros por página
                 ordering: true, //Habilitar ordenamiento
-                searching: true //Habilitar la busqueda
+                searching: true, //Habilitar la busqueda
+                columnDefs: [{
+                    orderable: false, targets: 4
+                }]
             });
         });
     </script>

@@ -10,7 +10,7 @@
             <h4><i class="fade fa-plus-circle"></i> Crear nuevo producto</h4>
         </div>
         <div class="card-body">
-            <form method="POST">
+            <form method="POST" enctype="multipart/form-data">
                 <!--validation summary-->
                 <div asp-validation-summary="All" class="alert alert-danger d-none" id="validation-summary"></div>
                 <!--Campo: Nombre-->
@@ -36,8 +36,9 @@
                     <label asp-for="Producto.Imagen" class="form-label"></label>
                     <div class="input-group">
                         <span class="input-group-text"><i class="fa-solid fa-image"></i></span>
-                        <input asp-for="Producto.Imagen" class="form-control" value="test.jpg" placeholder="Ingresa la imagen del producto" />
-                    <span asp-validation-for="Producto.Imagen" class="text-danger"></span>
+                        <input type="file" asp-for="Producto.ImagenSubida" class="form-control" placeholder="Ingresa la imagen del producto" />
+                    </div>
+                    <span asp-validation-for="Producto.ImagenSubida" class="text-danger"></span>
                 </div>
                 <!--Campo: Precio-->
                 <div class="mb-3">
@@ -62,7 +63,9 @@
                         <label asp-for="Producto.CategoriaId" class="form-label"></label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="fa-solid fa-table-list"></i></span>
-                            <input asp-for="Producto.CategoriaId" class="form-control" value="1" placeholder="Ingresa la categoría" />
+                            <select asp-for=Producto.CategoriaId asp-items="Model.Categorias" class="form-control">
+                                <option value="">Seleccione una categoría</option>
+                            </select>
                         </div>
                         <span asp-validation-for="Producto.CategoriaId" class="text-danger"></span>
                     </div>

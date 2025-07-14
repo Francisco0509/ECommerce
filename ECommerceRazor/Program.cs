@@ -34,4 +34,10 @@ app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
 
+//Redirigir manualmente a la página de inicio
+app.MapGet("/", context => { 
+    context.Response.Redirect("/Cliente/Inicio/Index");
+    return Task.CompletedTask;
+});
+
 app.Run();

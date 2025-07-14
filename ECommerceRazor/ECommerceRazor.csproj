@@ -19,8 +19,4 @@
     <ProjectReference Include="..\ECommerceRazor.Models\ECommerceRazor.Models.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Pages\Cliente\" />
-  </ItemGroup>
-
 </Project>

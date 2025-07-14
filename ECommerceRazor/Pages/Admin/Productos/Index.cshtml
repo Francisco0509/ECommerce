@@ -82,7 +82,7 @@
                 const productoName = this.getAttribute('data-name');
 
                 Swal.fire({
-                    title: `¿Estás seguro de eliminar la categoría "${categoriaName}"?`,
+                    title: `¿Estás seguro de eliminar el producto "${productoName}"?`,
                     text: "Esta acción no se puede deshacer.",
                     icon: "warning",
                     showCancelButton: true,
@@ -92,7 +92,7 @@
                     cancelButtonText: "Cancelar"
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        console.log(JSON.stringify(categoriaId));
+                        //console.log(JSON.stringify(productoId));
                         fetch("?handler=Delete", {
                             method: "POST",
                             headers: {

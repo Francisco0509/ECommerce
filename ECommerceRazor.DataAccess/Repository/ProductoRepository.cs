@@ -24,10 +24,7 @@ namespace ECommerceRazor.DataAccess.Repository
             objDesdeBd.Precio = producto.Precio;
             objDesdeBd.Stock = producto.Stock;
             objDesdeBd.CategoriaId = producto.CategoriaId;
-            if (objDesdeBd.Imagen != null)
-            { 
-                objDesdeBd.Imagen = producto.Imagen;
-            }
+            objDesdeBd.Imagen = producto.Imagen;
         }
     }
 }

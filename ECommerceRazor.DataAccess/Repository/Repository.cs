@@ -38,12 +38,20 @@ namespace ECommerceRazor.DataAccess.Repository
             return queryable.ToList();
         }
 
-        public T GetFirstOrDefaul(Expression<Func<T, bool>>? filter = null)
+        public T GetFirstOrDefaul(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
         {
             IQueryable<T> queryable = _dbSet;
             if (filter != null)
             {
                 queryable = queryable.Where(filter);
+                //Incluir relaciones
+                if (!string.IsNullOrWhiteSpace(includeProperties))
+                {
+                    foreach (var includeProperty in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        queryable = queryable.Include(includeProperty.Trim());
+                    }
+                }
             }
 
             return queryable.FirstOrDefault();

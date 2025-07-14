@@ -15,7 +15,7 @@ namespace ECommerceRazor.DataAccess.Repository.IRepository
         void Remove(T entity);
         //Borrar varios registros a la vez
         void RemoveRange(IEnumerable<T> entities);
-        T GetFirstOrDefaul(Expression<Func<T, bool>> ? filter = null);
+        T GetFirstOrDefaul(Expression<Func<T, bool>> ? filter = null, string? includeProperties = null);
         bool NameExists(string name);
     }
 }

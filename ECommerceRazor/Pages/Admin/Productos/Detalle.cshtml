@@ -1,0 +1,58 @@
+﻿@page
+@model ECommerceRazor.Pages.Admin.Productos.DetalleModel
+@{
+    ViewData["Title"] = "Detalle de Producto";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-lg">
+        <div class="card-header bg-primary text-white">
+            <h4>Detalle de producto</h4>
+        </div>
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Id</dt>
+                <dt class="col-sm-9">@Model.Producto.Id</dt>
+            </dl>
+            <dl class="row">
+                <dt class="col-sm-3">Nombre</dt>
+                <dt class="col-sm-9">@Model.Producto.Nombre</dt>
+            </dl>
+            <dl class="row">
+                <dt class="col-sm-3">Descripción</dt>
+                <dt class="col-sm-9">@Model.Producto.Descripcion</dt>
+            </dl>            
+            <dl class="row">
+                <dt class="col-sm-3">Precio</dt>
+                <dt class="col-sm-9">@Model.Producto.Precio</dt>
+            </dl>
+            <dl class="row">
+                <dt class="col-sm-3">Stock</dt>
+                <dt class="col-sm-9">@Model.Producto.Stock</dt>
+            </dl>
+            <dl class="row">
+                <dt class="col-sm-3">Precio</dt>
+                <dt class="col-sm-9">@Model.Producto.Precio</dt>
+            </dl>
+            <dl class="row">
+                <dt class="col-sm-3">Fecha creación</dt>
+                <dt class="col-sm-9">@Model.Producto.FechaCreacion</dt>
+            </dl>
+            <dl class="row">
+                <dt class="col-sm-3">Categoría</dt>
+                <dt class="col-sm-9">@Model.Producto.Categoria.Nombre</dt>
+            </dl>
+            <!--Vista previa de la imagen actual-->
+            @if (!string.IsNullOrEmpty(Model.Producto.Imagen))
+            {
+                <div class="mb-3">
+                    <img src="~/img/@Model.Producto.Imagen" alt="@Model.Producto.Nombre" class="img-thumbnail" style="max-width: 200px;" />
+                </div>
+            }
+            
+        </div>
+        <div class="card-footer text-end">
+            <a asp-page="Index" class="btn btn-secondary"><i class="fa fa-arrow-left"></i> Regresar</a>
+        </div>
+    </div>
+</div>

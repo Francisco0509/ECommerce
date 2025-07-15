@@ -18,7 +18,7 @@ namespace ECommerceRazor.Pages.Admin.Productos
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            Producto = _unitOfWork.Producto.GetFirstOrDefaul(p => p.Id == id, "Categoria");
+            Producto = _unitOfWork.Producto.GetFirstOrDefault(p => p.Id == id, "Categoria");
             if (Producto == null)
             {
                 return NotFound();

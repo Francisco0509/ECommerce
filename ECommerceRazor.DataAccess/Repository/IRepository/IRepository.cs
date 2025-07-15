@@ -9,13 +9,13 @@ namespace ECommerceRazor.DataAccess.Repository.IRepository
 {
     public interface IRepository<T> where T : class
     {
-        IEnumerable<T> GetAll(string? includeProperties = null);
+        IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null);
         void Add(T entity);
         //void Update(T entity);
         void Remove(T entity);
         //Borrar varios registros a la vez
         void RemoveRange(IEnumerable<T> entities);
-        T GetFirstOrDefaul(Expression<Func<T, bool>> ? filter = null, string? includeProperties = null);
+        T GetFirstOrDefault(Expression<Func<T, bool>> ? filter = null, string? includeProperties = null);
         bool NameExists(string name);
     }
 }

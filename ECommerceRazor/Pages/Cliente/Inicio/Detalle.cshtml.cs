@@ -1,11 +1,14 @@
 using ECommerceRazor.DataAccess.Repository.IRepository;
 using ECommerceRazor.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using System.Security.Claims;
 
 namespace ECommerceRazor.Pages.Cliente.Inicio
 {
+    [Authorize]
     public class DetalleModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -20,8 +23,13 @@ namespace ECommerceRazor.Pages.Cliente.Inicio
 
         public IActionResult OnGet(int id)
         {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
             CarritoCompra = new() {
-                Producto = _unitOfWork.Producto.GetFirstOrDefaul(p => p.Id == id, "Categoria")
+                ApplicationUserId = claim.Value,
+                Producto = _unitOfWork.Producto.GetFirstOrDefault(p => p.Id == id, "Categoria"),
+                ProductoId = id,
             };
             if (CarritoCompra == null)
             {
@@ -30,17 +38,59 @@ namespace ECommerceRazor.Pages.Cliente.Inicio
             return Page();
         }
 
-        //public IActionResult OnPostAgregarAlCarrito()
-        //{
-        //    if (CarritoCompra.Cantidad < 1 || CarritoCompra.Cantidad > Producto.Stock)
-        //    {
-        //        ModelState.AddModelError("Cantidad", $"Debe ingresar un valor entre 1 y {Producto.Stock}");
-        //        return Page();
-        //    }
+        public IActionResult OnPost()
+        {
+            
 
-        //    //Aquí se maneja la lógica del carrito
-        //    TempData["Success"] = $"{CarritoCompra.Cantidad} unidad(es) del producto {Producto.Nombre} añadido al carrito. ";
-        //    return RedirectToPage("/Cliente/Inicio/Index");
-        //}
+            if (ModelState.IsValid)
+            {
+                //Cargar el producto 
+                var producto = _unitOfWork.Producto.GetFirstOrDefault(p => p.Id == CarritoCompra.ProductoId);
+
+                if (producto == null)
+                {
+                    return NotFound("No se encontró el producto relacionado");
+                }
+
+                //Validar si el inventario es 0
+                if (producto.Stock <= 0)
+                {
+                    TempData["Error"] = $"El producto no tiene inventario disponible.";
+                    return RedirectToAction("Detalle", new { id = CarritoCompra.ProductoId });
+                }
+
+                //Validar que la cantidad no sea mayor a la cantidad de producto en inventario
+                if (CarritoCompra.Cantidad < 1 || CarritoCompra.Cantidad > producto.Stock)
+                {
+
+                    //ModelState.AddModelError("Cantidad", $"Debe ingresar un valor entre 1 y {CarritoCompra.Producto.Stock}");
+                    TempData["Error"] = $"Debe ingresar un valor entre 1 y {producto.Stock}";
+                    return RedirectToAction("Detalle", new { id = CarritoCompra.ProductoId });
+                }
+
+                //Reducir la cantidad disponible del producto
+                producto.Stock -= CarritoCompra.Cantidad;
+
+                CarritoCompra carritoCompraDesdeBd = _unitOfWork.CarritoCompra.GetFirstOrDefault(
+                    filter: c => c.ProductoId == CarritoCompra.ProductoId 
+                    && c.ApplicationUserId == CarritoCompra.ApplicationUserId);
+
+                if (carritoCompraDesdeBd == null)
+                { 
+                    _unitOfWork.CarritoCompra.Add(CarritoCompra);
+                    _unitOfWork.Save();
+                    TempData["Success"] = $"{CarritoCompra.Cantidad} unidad(es) añadido al carrito. ";
+                }
+                else
+                {
+                    _unitOfWork.CarritoCompra.IncrementarContador(carritoCompraDesdeBd, CarritoCompra.Cantidad); 
+                    TempData["Success"] = $"{CarritoCompra.Cantidad} unidad(es) actualizadas en el carrito. ";
+                }
+
+                return RedirectToPage("/Index");
+            }
+            
+            return Page();
+        }
     }
 }

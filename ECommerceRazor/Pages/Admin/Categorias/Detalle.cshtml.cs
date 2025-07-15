@@ -19,7 +19,7 @@ namespace ECommerceRazor.Pages.Admin.Categorias
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            Categoria = _unitOfWork.Categoria.GetFirstOrDefaul(c => c.Id == id);
+            Categoria = _unitOfWork.Categoria.GetFirstOrDefault(c => c.Id == id);
             if (Categoria == null)
             {
                 return NotFound();

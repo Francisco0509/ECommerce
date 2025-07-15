@@ -27,7 +27,7 @@ namespace ECommerceRazor.Pages.Admin.Productos
         public IActionResult OnGet(int id)
         {
             //Cargar producto existende desde la base de datos
-            Producto = _unitOfWork.Producto.GetFirstOrDefaul(p => p.Id == id);
+            Producto = _unitOfWork.Producto.GetFirstOrDefault(p => p.Id == id);
             if(Producto == null)
             {
                 ModelState.AddModelError(string.Empty, "Producto no encontrado.");
@@ -62,7 +62,7 @@ namespace ECommerceRazor.Pages.Admin.Productos
                 return Page();
             }
             
-            var productoBD = _unitOfWork.Producto.GetFirstOrDefaul(p => p.Id == Producto.Id);
+            var productoBD = _unitOfWork.Producto.GetFirstOrDefault(p => p.Id == Producto.Id);
             if (productoBD == null)
             { 
                 return NotFound();
@@ -119,7 +119,7 @@ namespace ECommerceRazor.Pages.Admin.Productos
             else
             {
                 //Recuperar la imagen de la base de datos
-                var productoDesdeBd = _unitOfWork.Producto.GetFirstOrDefaul(p => p.Id == Producto.Id);
+                var productoDesdeBd = _unitOfWork.Producto.GetFirstOrDefault(p => p.Id == Producto.Id);
                 if (productoDesdeBd != null)
                 {
                     Producto.Imagen = productoDesdeBd.Imagen;

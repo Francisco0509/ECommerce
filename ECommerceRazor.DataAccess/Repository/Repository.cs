@@ -24,9 +24,13 @@ namespace ECommerceRazor.DataAccess.Repository
             _dbSet.Add(entity);
         }
 
-        public IEnumerable<T> GetAll(string? includeProperties = null)
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
         {
             IQueryable<T> queryable = _dbSet;
+            if (filter != null)
+            { 
+                queryable = queryable.Where(filter);
+            }
             //Incluir relaciones
             if(!string.IsNullOrWhiteSpace(includeProperties))
             {
@@ -38,7 +42,7 @@ namespace ECommerceRazor.DataAccess.Repository
             return queryable.ToList();
         }
 
-        public T GetFirstOrDefaul(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
+        public T GetFirstOrDefault(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
         {
             IQueryable<T> queryable = _dbSet;
             if (filter != null)

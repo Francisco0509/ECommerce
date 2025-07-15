@@ -16,12 +16,12 @@ namespace ECommerceRazor.Pages.Admin.Productos
         public IEnumerable<Producto> lProductos { get; set; }
         public void OnGet()
         {
-            lProductos = _unitOfWork.Producto.GetAll("Categoria"); //Incluir la categoría en la consulta
+            lProductos = _unitOfWork.Producto.GetAll(filter: null, "Categoria"); //Incluir la categoría en la consulta
         }
 
         public async Task<IActionResult> OnPostDeleteAsync([FromBody] int id)
         {
-            var producto = _unitOfWork.Producto.GetFirstOrDefaul(c => c.Id == id);
+            var producto = _unitOfWork.Producto.GetFirstOrDefault(c => c.Id == id);
             if (producto == null)
             {
                 TempData["Error"] = "El producto no existe.";

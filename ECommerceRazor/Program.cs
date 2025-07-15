@@ -18,10 +18,21 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 );
 
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => 
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<AppDbContext>()
-    .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>(TokenOptions.DefaultProvider);
+    .AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
+    //.AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>(TokenOptions.DefaultProvider);
+
+//Soporte para cooockies de Autenticación y Autorización
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = $"/Identity/Account/Login"; //Ruta predeterminada de inicio de sesión
+    options.LogoutPath = $"/Identity/Account/Logout"; //Ruta predeterminada de cierre de sesión
+    options.AccessDeniedPath = $"/Identity/Account/AccessDenied"; //Ruta predeterminada de acceso denegado
+    options.SlidingExpiration = true; //Renueva la cookie si el usuario está activo
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(60); //Tiempo de expiración de la cookie
+    options.Cookie.HttpOnly = true; //La cookie no es accesible desde JavaScript
+});
 
 //Agregar soporte para EmailSender
 builder.Services.AddSingleton<IEmailSender, EmailSender>();

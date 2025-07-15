@@ -19,7 +19,7 @@ namespace ECommerceRazor.Pages.Admin.Categorias
         public async Task<IActionResult> OnGetAsync(int id)
         {
             // Verificamos si la categoría existe
-            Categoria = _unitOfWork.Categoria.GetFirstOrDefaul(c => c.Id == id);
+            Categoria = _unitOfWork.Categoria.GetFirstOrDefault(c => c.Id == id);
             if (Categoria == null)
             {
                 return NotFound();
@@ -34,7 +34,7 @@ namespace ECommerceRazor.Pages.Admin.Categorias
                 return Page();
             }
                 
-            var categoriaBD = _unitOfWork.Categoria.GetFirstOrDefaul(c => c.Id == Categoria.Id);
+            var categoriaBD = _unitOfWork.Categoria.GetFirstOrDefault(c => c.Id == Categoria.Id);
             if (categoriaBD == null)
             {
                 return NotFound();

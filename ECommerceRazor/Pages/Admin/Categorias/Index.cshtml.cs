@@ -26,7 +26,7 @@ namespace ECommerceRazor.Pages.Admin.Categorias
 
         public async Task<IActionResult> OnPostDeleteAsync([FromBody] int id) 
         {
-            var categoria = _unitOfWork.Categoria.GetFirstOrDefaul(c => c.Id == id);
+            var categoria = _unitOfWork.Categoria.GetFirstOrDefault(c => c.Id == id);
             if(categoria == null)
             {
                 TempData["Error"] = "La categoría no existe.";

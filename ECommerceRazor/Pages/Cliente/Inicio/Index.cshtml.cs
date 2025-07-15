@@ -16,7 +16,7 @@ namespace ECommerceRazor.Pages.Cliente
         public IEnumerable<Producto> Productos { get; set; }
         public void OnGet()
         {
-            Productos = _unitOfWork.Producto.GetAll("Categoria");            
+            Productos = _unitOfWork.Producto.GetAll(filter: null, "Categoria");            
         }
     }
 }

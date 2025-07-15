@@ -14,7 +14,20 @@ namespace ECommerceRazor.DataAccess.Repository
         public CarritoCompraRepository(AppDbContext context) : base(context)
         {
             _context = context;
-        }       
+        }
 
+        public int DecrementarContador(CarritoCompra carritoCompra, int contador)
+        {
+            carritoCompra.Cantidad -= contador;
+            _context.SaveChanges();
+            return carritoCompra.Cantidad;
+        }
+
+        public int IncrementarContador(CarritoCompra carritoCompra, int contador)
+        {
+            carritoCompra.Cantidad += contador;
+            _context.SaveChanges();
+            return carritoCompra.Cantidad;
+        }
     }
 }

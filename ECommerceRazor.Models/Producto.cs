@@ -23,12 +23,9 @@ namespace ECommerceRazor.Models
         public string? Imagen { get; set; }
         [NotMapped]
         public IFormFile? ImagenSubida { get; set; }
-
         [Required(ErrorMessage = "El precio es obligatorio.")]
         [Range(0.01, double.MaxValue, ErrorMessage = "El precio debe ser mayor que cero.")]
         public decimal Precio { get; set; }
-        [Required(ErrorMessage = "El stock es obligatorio.")]
-        [Range(0, int.MaxValue, ErrorMessage = "El stock no puede ser negativo.")]
         public int Stock { get; set; }
         public DateTime FechaCreacion { get; set; } = DateTime.Now;
         //relación de producto con categoría

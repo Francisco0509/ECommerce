@@ -17,5 +17,7 @@ namespace ECommerceRazor.DataAccess
         public DbSet<Producto> Productos { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<CarritoCompra> CarritoCompras{ get; set; }
+        public DbSet<Orden> Ordenes { get; set; }
+        public DbSet<DetalleOrden> DetallesOrden { get; set; }
     }
 }

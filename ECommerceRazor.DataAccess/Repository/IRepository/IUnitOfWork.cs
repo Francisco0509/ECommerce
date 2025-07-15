@@ -11,6 +11,9 @@ namespace ECommerceRazor.DataAccess.Repository.IRepository
         ICategoriaRepository Categoria { get; }
         IProductoRepository Producto { get; }
         ICarritoCompraRepository CarritoCompra { get; }
+        IOrdenRepository Orden { get; }
+        IDetalleOrdenRepository DetalleOrden { get; }
+        IApplicationUserRepository ApplicationUser { get; }
         void Save();
     }
 }

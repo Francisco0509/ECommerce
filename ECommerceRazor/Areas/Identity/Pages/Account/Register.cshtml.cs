@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Security.Cryptography.Xml;
 using System.Text;
@@ -85,6 +86,10 @@ namespace ECommerceRazor.Areas.Identity.Pages.Account
             [Display(Name = "Email")]
             public string Email { get; set; }
 
+            [Required]
+            [Display(Name = "Teléfono")]
+            public string PhoneNumber { get; set; }
+
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -142,6 +147,7 @@ namespace ECommerceRazor.Areas.Identity.Pages.Account
                 user.CodigoPostal = Input.CodigoPostal;
                 user.Ciudad = Input.Ciudad;
                 user.Pais = Input.Pais;
+                user.PhoneNumber = Input.PhoneNumber;
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
 

@@ -15,7 +15,7 @@
                             <h3 class="text-white-50">Resumen de Compra</h3>
                         </div>
                         <div class="col-6 text-end">
-                            <a asp-page="Index" class="btn btn-outline-info btn-sm">Volver al Carrito</a>
+                            <a asp-page="/Cliente/Carrito/Index" class="btn btn-outline-info btn-sm">Volver al Carrito</a>
                         </div>
                     </div>
                 </div>
@@ -34,7 +34,8 @@
                                         <label>Nombre Completo</label>
                                     </div>
                                     <div class="col-7">
-                                        <input name="Nombre" class="form-control" placeholder="Ingresa tu nombre" required />
+                                        <input asp-for="Orden.NombreUsuario" class="form-control" radonly />
+                                        <span asp-validation-for="Orden.NombreUsuario" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="row my-1">
@@ -42,7 +43,17 @@
                                         <label>Teléfono</label>
                                     </div>
                                     <div class="col-7">
-                                        <input name="Telefono" type="tel" class="form-control" placeholder="Ingresa tu teléfono" required />
+                                        <input asp-for="Orden.Telefono" type="tel" class="form-control" radonly />
+                                        <span asp-validation-for="Orden.Telefono" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-5">
+                                        <label>Email</label>
+                                    </div>
+                                    <div class="col-7">
+                                        <input asp-for="Orden.Email" type="email" class="form-control" radonly />
+                                        <span asp-validation-for="Orden.Email" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="row my-1">
@@ -50,7 +61,8 @@
                                         <label>Dirección</label>
                                     </div>
                                     <div class="col-7">
-                                        <textarea data-no-tinymce="true" name="Direccion" class="form-control" placeholder="Ingresa tu dirección" required style="height: 100px;"></textarea>
+                                        <textarea data-no-tinymce="true" asp-for="Orden.Direccion" class="form-control" style="height: 100px;" radonly disabled></textarea>
+                                        <span asp-validation-for="Orden.Direccion" class="text-danger"></span>
                                     </div>
                                 </div>
                                 <div class="row my-1">
@@ -58,7 +70,7 @@
                                         <label>Instrucciones Adicionales</label>
                                     </div>
                                     <div class="col-7">
-                                        <textarea data-no-tinymce="true" name="Instrucciones" class="form-control" placeholder="Opcional" style="height: 80px;"></textarea>
+                                        <textarea data-no-tinymce="true" asp-for="Orden.InstruccionesAdicionales" class="form-control" placeholder="Ingresa instrucciones adicionales" style="height: 80px;"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -70,25 +82,20 @@
                                 </h4>
                                 <ul class="list-group mb-3">
                                     <!-- Producto -->
-                                    <li class="list-group-item d-flex justify-content-between">
-                                        <div>
-                                            <h6 class="my-0">Producto: Camiseta Básica</h6>
-                                            <small class="text-muted">Cantidad: 2</small>
-                                        </div>
-                                        <span class="text-muted">$30.00</span>
-                                    </li>
-                                    <li class="list-group-item d-flex justify-content-between">
-                                        <div>
-                                            <h6 class="my-0">Producto: Jeans Clásicos</h6>
-                                            <small class="text-muted">Cantidad: 1</small>
-                                        </div>
-                                        <span class="text-muted">$50.00</span>
-                                    </li>
+                                    @foreach (var detalle in Model.ListaCarritoCompra) {
+                                        <li class="list-group-item d-flex justify-content-between">
+                                            <div>
+                                                <h6 class="my-0">Producto: @detalle.Producto.Nombre</h6>
+                                                <small class="text-muted">Cantidad: @detalle.Cantidad</small>
+                                            </div>
+                                            <span class="text-muted">@String.Format("{0:C}", (detalle.Producto.Precio*detalle.Cantidad))</span>
+                                        </li>
+                                    }
 
                                     <!-- Total -->
                                     <li class="list-group-item d-flex justify-content-between bg-light">
-                                        <small class="text-info">Total (USD)</small>
-                                        <strong class="text-info">$80.00</strong>
+                                        <small class="text-info">Total (MXN)</small>
+                                        <strong class="text-info">@String.Format("{0:C}",Model.Orden.TotalOrden)</strong>
                                     </li>
                                 </ul>
                             </div>

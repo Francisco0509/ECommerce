@@ -76,7 +76,7 @@ namespace ECommerceRazor.Pages.Cliente.Carrito
             var carrito = _unitOfWork.CarritoCompra.GetFirstOrDefault(c => c.Id == carritoId);
             var producto = _unitOfWork.Producto.GetFirstOrDefault(c => c.Id == carrito.ProductoId);
             //Regresamos la cantidad al inventario
-            producto.Stock -= carrito.Cantidad;
+            producto.Stock += carrito.Cantidad;
 
             _unitOfWork.CarritoCompra.Remove(carrito);
             _unitOfWork.Save();

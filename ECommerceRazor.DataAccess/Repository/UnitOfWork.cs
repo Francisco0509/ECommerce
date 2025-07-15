@@ -16,10 +16,12 @@ namespace ECommerceRazor.DataAccess.Repository
             _context = context;
             Categoria = new CategoriaRepository(_context);
             Producto = new ProductoRepository(_context);
+            CarritoCompra = new CarritoCompraRepository(_context);
         }
 
         public ICategoriaRepository Categoria { get; private set; }
         public IProductoRepository Producto { get; private set; }
+        public ICarritoCompraRepository CarritoCompra { get; private set; }
         public void Dispose()
         {
             _context.Dispose();

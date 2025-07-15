@@ -15,33 +15,32 @@ namespace ECommerceRazor.Pages.Cliente.Inicio
         }
 
         [BindProperty]
-        public Producto Producto { get; set; }
-
-        [BindProperty]
-        public int Cantidad { get; set; }
+        public CarritoCompra CarritoCompra { get; set; }
 
 
         public IActionResult OnGet(int id)
         {
-            Producto = _unitOfWork.Producto.GetFirstOrDefaul(p => p.Id == id, "Categoria");
-            if (Producto == null)
+            CarritoCompra = new() {
+                Producto = _unitOfWork.Producto.GetFirstOrDefaul(p => p.Id == id, "Categoria")
+            };
+            if (CarritoCompra == null)
             {
                 return RedirectToPage("/Index");
             }
             return Page();
         }
 
-        public IActionResult OnPostAgregarAlCarrito()
-        {
-            if (Cantidad < 1 || Cantidad > Producto.Stock)
-            {
-                ModelState.AddModelError("Cantidad", $"Debe ingresar un valor entre 1 y {Producto.Stock}");
-                return Page();
-            }
+        //public IActionResult OnPostAgregarAlCarrito()
+        //{
+        //    if (CarritoCompra.Cantidad < 1 || CarritoCompra.Cantidad > Producto.Stock)
+        //    {
+        //        ModelState.AddModelError("Cantidad", $"Debe ingresar un valor entre 1 y {Producto.Stock}");
+        //        return Page();
+        //    }
 
-            //Aquí se maneja la lógica del carrito
-            TempData["Success"] = $"{Cantidad} unidad(es) del producto {Producto.Nombre} añadido al carrito. ";
-            return RedirectToPage("/Cliente/Inicio/Index");
-        }
+        //    //Aquí se maneja la lógica del carrito
+        //    TempData["Success"] = $"{CarritoCompra.Cantidad} unidad(es) del producto {Producto.Nombre} añadido al carrito. ";
+        //    return RedirectToPage("/Cliente/Inicio/Index");
+        //}
     }
 }

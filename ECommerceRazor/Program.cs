@@ -2,6 +2,9 @@ using ECommerceRazor.DataAccess;
 using ECommerceRazor.DataAccess.Repository;
 using ECommerceRazor.DataAccess.Repository.IRepository;
 using ECommerceRazor.Models;
+using ECommerceRazor.Utility;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +16,15 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         builder.Configuration.GetConnectionString("SqlConn")
         )
 );
+
+
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => 
+    options.SignIn.RequireConfirmedAccount = false)
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>(TokenOptions.DefaultProvider);
+
+//Agregar soporte para EmailSender
+builder.Services.AddSingleton<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 var app = builder.Build();
 
@@ -28,13 +40,14 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
 
-//Redirigir manualmente a la página de inicio
+//Redirigir manualmente a la pï¿½gina de inicio
 app.MapGet("/", context => { 
     context.Response.Redirect("/Cliente/Inicio/Index");
     return Task.CompletedTask;

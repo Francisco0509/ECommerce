@@ -6,6 +6,7 @@ using ECommerceRazor.Utility;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +18,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
         )
 );
 
+
+//Soporte para la configuración de Stripe
+builder.Services.Configure<ConfiguracionStripe>(builder.Configuration.GetSection("Stripe"));
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     options.SignIn.RequireConfirmedAccount = false)
@@ -50,6 +54,9 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseRouting();
+
+string key = builder.Configuration.GetSection("Stripe:ClaveSecreta").Get<string>();
+StripeConfiguration.ApiKey = key;
 
 app.UseAuthentication();
 app.UseAuthorization();

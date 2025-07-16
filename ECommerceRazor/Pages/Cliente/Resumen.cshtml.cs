@@ -1,9 +1,12 @@
 using ECommerceRazor.DataAccess.Repository.IRepository;
 using ECommerceRazor.Models;
 using ECommerceRazor.Utility;
+using Humanizer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Stripe;
+using Stripe.Checkout;
 using System.Security.Claims;
 
 namespace ECommerceRazor.Pages.Cliente
@@ -52,7 +55,7 @@ namespace ECommerceRazor.Pages.Cliente
             }
         }
 
-        public void OnPost()
+        public IActionResult OnPost()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -76,7 +79,7 @@ namespace ECommerceRazor.Pages.Cliente
                 Orden.FechaOrden = DateTime.Now;
                 Orden.UsuarioId = claim.Value;
                 Orden.NombreUsuario = applicationUser.Nombres + " " + applicationUser.Apellidos;
-                Orden.Direccion = Orden.Direccion;
+                Orden.Direccion = applicationUser.Direccion;
                 Orden.Telefono = Orden.Telefono;
                 Orden.InstruccionesAdicionales = Orden.InstruccionesAdicionales ?? string.Empty;
                 Orden.Email = Orden.Email;
@@ -92,7 +95,7 @@ namespace ECommerceRazor.Pages.Cliente
                         ProductoId = item.ProductoId,
                         OrdenId = Orden.Id,
                         Precio = (double)item.Producto.Precio,
-                        NombreProducto = item.Producto.Nombre,
+                        NombreProducto = item.Producto.Nombre,                        
                         Cantidad = item.Cantidad
                     };
 
@@ -101,9 +104,56 @@ namespace ECommerceRazor.Pages.Cliente
                 }
 
                 //Eliminar el carrito de compras del usuario
-                _unitOfWork.CarritoCompra.RemoveRange(ListaCarritoCompra);
+                //_unitOfWork.CarritoCompra.RemoveRange(ListaCarritoCompra);
                 _unitOfWork.Save();
+
+                //Código para reenviar al pago en Stripe
+                var domain = $"{Request.Scheme}://{Request.Host.Value}";
+
+                var options = new SessionCreateOptions
+                {
+                    PaymentMethodTypes = new List<string> { "card" },
+                    LineItems = new List<SessionLineItemOptions>(),
+                    Mode = "payment",
+                    SuccessUrl = $"{domain}/Cliente/Carrito/ConfirmacionOrden?id={Orden.Id}",
+                    CancelUrl = $"{domain}/Cliente/Carrito/Index",
+                };
+
+                //Agregar items para que se muestren en Stripe
+                foreach (var item in ListaCarritoCompra)
+                {
+                    var sessionLineItem = new SessionLineItemOptions
+                    {
+                        PriceData = new SessionLineItemPriceDataOptions
+                        {
+                            UnitAmount = (long)(item.Producto.Precio * 100), //Total en centavos
+                            Currency = "mxn",
+                            ProductData = new SessionLineItemPriceDataProductDataOptions
+                            {
+                                Name = item.Producto.Nombre,
+                                //Description = $"Total de líneas: {cantidad}"
+                            },
+                        },
+                        Quantity = item.Cantidad,
+                    };
+
+                    options.LineItems.Add(sessionLineItem);
+                }
+
+                var service = new SessionService();
+                Session session = service.Create(options);
+                Response.Headers.Add("Location", session.Url);
+
+                //Obtener id de Stripe
+                Orden.SessionId = session.Id;
+                //Orden.PaymentIntentId = session.PaymentIntentId;
+
+                _unitOfWork.Save();
+
+                return new StatusCodeResult(303);
             }
+
+            return Page();
         }
 
     }

@@ -166,14 +166,16 @@ namespace ECommerceRazor.Areas.Identity.Pages.Account
                     { 
                         await _userManager.AddToRoleAsync(user, CNT.Administrador);
                     }
-                    else
+                    else if(role == CNT.Cliente)
                     {
-                        if (role == CNT.Cliente)
-                        {
-                            await _userManager.AddToRoleAsync(user, CNT.Cliente);
-                        }
+                        await _userManager.AddToRoleAsync(user, CNT.Cliente);
+                    }
+                    else 
+                    {
+                        await _userManager.AddToRoleAsync(user, CNT.Cliente);
                     }
 
+                        
 
                     _logger.LogInformation("User created a new account with password.");
 

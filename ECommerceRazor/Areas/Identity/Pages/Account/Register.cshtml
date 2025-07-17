@@ -67,10 +67,15 @@
             </div>
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
 
-            <div class="form-floating my-2">
-                <input type="radio" name="rdoUserRole" value="@CNT.Administrador" /> @CNT.Administrador
-                <input type="radio" name="rdoUserRole" value="@CNT.Cliente" /> @CNT.Cliente
-            </div>
+            <!--Selector de roles-->
+            @if (User.Identity.IsAuthenticated && User.IsInRole("Administrador"))
+            {
+                <div class="form-floating my-2">
+                    <input type="radio" name="rdoUserRole" value="@CNT.Administrador" /> @CNT.Administrador
+                    <input type="radio" name="rdoUserRole" value="@CNT.Cliente" /> @CNT.Cliente
+                </div>
+            }
+            
         </form>
     </div>
     <div class="col-md-6 col-md-offset-2">

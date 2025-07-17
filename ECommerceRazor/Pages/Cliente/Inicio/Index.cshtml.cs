@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ECommerceRazor.Pages.Cliente
 {
-    [Authorize(Roles = "Administrador,Cliente")]
     public class IndexModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;

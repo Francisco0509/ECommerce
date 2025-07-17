@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace ECommerceRazor.Pages.Cliente.Inicio
 {
-    [Authorize(Roles = "Cliente")]
+    [Authorize]
     public class DetalleModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;

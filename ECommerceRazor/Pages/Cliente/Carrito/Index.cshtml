@@ -37,7 +37,7 @@
 							<div class="col-12 text-sm-center text-md-start col-md-5 pt-md-4 ">
 								<h4><strong>@item.Producto.Nombre</strong></h4>
 
-								<div class="badge bg-primary text-center" style="font-size:12px;">
+								<div class="badge bg-secondary text-center" style="font-size:12px;">
 									@item.Producto.Categoria.Nombre
 								</div>
 							</div>
@@ -46,7 +46,7 @@
 									<h6><strong>@String.Format("{0:C}",item.Producto.Precio) <span class="text-muted">x</span> @item.Cantidad </strong></h6>
 								</div>
 								<div class="col-6 col-sm-4 col-lg-6">
-									<button type="submit" class="btn btn-primary"
+									<button type="submit" class="btn btn-secondary"
 											asp-page-handler="mas" asp-route-carritoId="@item.Id">
 										<i class="fa-solid fa-plus"></i>
 									</button>
@@ -84,7 +84,7 @@
 				</div>
 				<div class="card-footer">
 					<div class="col-12 col-lg-4 offset-lg-8 col-md-6 offset-md-6">
-						<a asp-page="/Cliente/Resumen" class="btn btn-success form-control">Resumen</a>
+						<a asp-page="/Cliente/Resumen" class="btn btn-dark form-control">Resumen</a>
 					</div>
 				</div>
 			</div>

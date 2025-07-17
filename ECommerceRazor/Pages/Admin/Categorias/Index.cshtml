@@ -39,9 +39,9 @@
                         <td>@categoria.FechaCreacion.ToString("dd/MM/yyyy")</td>
                         <td>
                             <a asp-page="Editar" asp-route-id="@categoria.Id" class="btn btn-sm btn-warning"><i class="fa-solid fa-pen-to-square"></i> Editar</a>
-                            <a asp-page="Detalle" asp-route-id="@categoria.Id" class="btn btn-sm btn-info"><i class="fa-solid fa-circle-info"></i> Detalle</a>
+                            <a asp-page="Detalle" asp-route-id="@categoria.Id" class="btn btn-sm btn-secondary"><i class="fa-solid fa-circle-info"></i> Detalle</a>
                             @Html.AntiForgeryToken()
-                            <buton class="btn btn-danger btn-delete" data-id="@categoria.Id" data-name="@categoria.Nombre"><i class="fa-solid fa-trash-can"></i>Eliminar</buton>
+                            <buton class="btn btn-danger btn-delete btn-sm" data-id="@categoria.Id" data-name="@categoria.Nombre"><i class="fa-solid fa-trash-can"></i>Eliminar</buton>
                         </td>
                     </tr>
                 }

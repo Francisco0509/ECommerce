@@ -1,5 +1,6 @@
 using ECommerceRazor.DataAccess.Repository.IRepository;
 using ECommerceRazor.Models;
+using ECommerceRazor.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -80,6 +81,10 @@ namespace ECommerceRazor.Pages.Cliente.Inicio
                     _unitOfWork.CarritoCompra.Add(CarritoCompra);
                     _unitOfWork.Save();
                     TempData["Success"] = $"{CarritoCompra.Cantidad} unidad(es) añadido al carrito. ";
+
+                    //Session
+                    HttpContext.Session.SetInt32(CNT.CarritoSesion,
+                        _unitOfWork.CarritoCompra.GetAll(u => u.ApplicationUserId == CarritoCompra.ApplicationUserId).ToList().Count());
                 }
                 else
                 {

@@ -25,7 +25,12 @@ builder.Services.Configure<ConfiguracionStripe>(builder.Configuration.GetSection
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<AppDbContext>().AddDefaultTokenProviders();
-    //.AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>(TokenOptions.DefaultProvider);
+//.AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>(TokenOptions.DefaultProvider);
+
+//Configurar requerimiento de confirmación de Email
+builder.Services.Configure<IdentityOptions>(options => {
+    options.SignIn.RequireConfirmedAccount = true;
+});
 
 //Soporte para cooockies de Autenticación y Autorización
 builder.Services.ConfigureApplicationCookie(options =>
@@ -36,6 +41,14 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.SlidingExpiration = true; //Renueva la cookie si el usuario está activo
     options.ExpireTimeSpan = TimeSpan.FromMinutes(60); //Tiempo de expiración de la cookie
     options.Cookie.HttpOnly = true; //La cookie no es accesible desde JavaScript
+});
+
+builder.Services.AddDistributedMemoryCache();
+//Soporte para trabajo con sesiones
+builder.Services.AddSession(options => { 
+    options.IdleTimeout = TimeSpan.FromMinutes(60);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
 });
 
 //Agregar soporte para EmailSender
@@ -60,6 +73,7 @@ StripeConfiguration.ApiKey = key;
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseSession();
 
 app.MapStaticAssets();
 app.MapRazorPages()

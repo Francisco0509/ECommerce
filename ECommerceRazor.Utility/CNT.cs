@@ -20,5 +20,8 @@ namespace ECommerceRazor.Utility
         public const string EstadoCompletado = "Estado_Completado";
         public const string EsdoCancelado = "Estado_Cancelado";
         public const string EstadoReembolsado = "Estado_Reembolsado";
+
+        //Constante de sesión
+        public const string CarritoSesion = "CarritoSesion";
     }
 }

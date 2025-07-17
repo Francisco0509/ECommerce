@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@using ECommerceRazor.Utility
+@inject IHttpContextAccessor HttpContextAccessor
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -48,12 +51,25 @@
                         <li>
                             <a class="nav-link text-dark" asp-area="" asp-page="/Admin/Ordenes/Index">Manejo de ordenes</a>
                         </li>
-                        <!--Carrito de Compra-->
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Cliente/Carrito/Index">
-                                <i class="fa-solid fa-cart-shopping"></i>
-                            </a>
-                        </li>
+                        @if (HttpContextAccessor.HttpContext.Session.GetInt32(CNT.CarritoSesion) != null)
+                        {
+                            <!--Carrito de Compra-->
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Cliente/Carrito/Index">
+                                    <i class="fa-solid fa-cart-shopping"></i> &nbsp; (@HttpContextAccessor.HttpContext.Session.GetInt32(CNT.CarritoSesion))
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <!--Carrito de Compra-->
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Cliente/Carrito/Index">
+                                    <i class="fa-solid fa-cart-shopping"></i> &nbsp; (0)
+                                </a>
+                            </li>
+                        }
+
                     </ul>
 
                     <!--LoginPartial alineado a la derecha-->

@@ -1,10 +1,12 @@
 using ECommerceRazor.DataAccess.Repository.IRepository;
 using ECommerceRazor.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ECommerceRazor.Pages.Cliente
 {
+    [Authorize(Roles = "Administrador,Cliente")]
     public class IndexModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;

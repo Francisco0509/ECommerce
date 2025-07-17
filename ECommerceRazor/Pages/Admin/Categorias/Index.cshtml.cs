@@ -1,6 +1,7 @@
 using ECommerceRazor.DataAccess;
 using ECommerceRazor.DataAccess.Repository.IRepository;
 using ECommerceRazor.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -8,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ECommerceRazor.Pages.Admin.Categorias
 {
+    [Authorize(Roles = "Administrador")]
     public class IndexModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -26,10 +28,10 @@ namespace ECommerceRazor.Pages.Admin.Categorias
             lCategorias = _unitOfWork.Categoria.GetAll().OrderBy(c => c.OrdenVisualizacion);
 
             //Prueba de envío de email
-            string email = "fruiz.cruz@gmail.com";
-            string subject = "Prueba de correo";
-            string message = "<h1>Este es un mensaje de prueba</h1><p>Saludos desde ECommerceRazor en.NET</p>";
-            _emailSender.SendEmailAsync(email, subject, message);
+            //string email = "fruiz.cruz@gmail.com";
+            //string subject = "Prueba de correo";
+            //string message = "<h1>Este es un mensaje de prueba</h1><p>Saludos desde ECommerceRazor en.NET</p>";
+            //_emailSender.SendEmailAsync(email, subject, message);
         }
 
         public async Task<IActionResult> OnPostDeleteAsync([FromBody] int id) 

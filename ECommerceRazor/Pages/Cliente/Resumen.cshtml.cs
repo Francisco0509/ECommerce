@@ -11,7 +11,7 @@ using System.Security.Claims;
 
 namespace ECommerceRazor.Pages.Cliente
 {
-    [Authorize]
+    [Authorize(Roles = "Cliente")]
     public class ResumenModel : PageModel
     {
         public IEnumerable<CarritoCompra> ListaCarritoCompra { get; set; }

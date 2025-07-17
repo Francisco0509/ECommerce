@@ -1,10 +1,12 @@
 using ECommerceRazor.DataAccess.Repository.IRepository;
 using ECommerceRazor.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace ECommerceRazor.Pages.Admin.Productos
 {
+    [Authorize(Roles = "Administrador")]
     public class DetalleModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;

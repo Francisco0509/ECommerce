@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace ECommerceRazor.Pages.Cliente.Carrito
 {
-    [Authorize]
+    [Authorize(Roles = "Cliente")]
     public class IndexModel : PageModel
     {
         public IEnumerable<CarritoCompra> ListaCarritoCompra { get; set; }

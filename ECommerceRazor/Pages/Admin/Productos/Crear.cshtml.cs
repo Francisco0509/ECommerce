@@ -1,5 +1,6 @@
 using ECommerceRazor.DataAccess.Repository.IRepository;
 using ECommerceRazor.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace ECommerceRazor.Pages.Admin.Productos
 {
+    [Authorize(Roles = "Administrador")]
     public class CrearModel : PageModel
     {
         private readonly IUnitOfWork _unitOfWork;
